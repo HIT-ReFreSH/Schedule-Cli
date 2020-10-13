@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Schedule-Cli": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\"
+    }
+  }
+}

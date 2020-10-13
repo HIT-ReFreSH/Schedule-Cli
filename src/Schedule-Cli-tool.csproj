@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>HitRefresh.Schedule-cli</PackageId>
+    <Authors>HitReFreSH</Authors>
+
+    <ApplicationIcon>..\images\icon.ico</ApplicationIcon>
+    <StartupObject>HitRefresh.Schedule.Program</StartupObject>
+    <AssemblyName>HRSchedule</AssemblyName>
+    <RootNamespace>HitRefresh.Schedule</RootNamespace>
+    <GenerateDocumentFile>true</GenerateDocumentFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <Company>HitReFreSH</Company>
+    <PackageProjectUrl>https://github.com/HIT-ReFreSH/Schedule-Cli</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HIT-ReFreSH/Schedule-Cli.git</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <Version>2.1.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackAsTool>true</PackAsTool>
+
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <Description>用于将哈尔滨工业大学的课表转换为iCalendar格式.</Description>
+    <Copyright>Copyright (c) 2019-2020 HitReFreSH</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\images\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\images\icon.ico" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HitRefresh.Schedule" Version="2.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="PlasticMetal.MobileSuit" Version="2.1.2" />
+  </ItemGroup>
+
+</Project>
