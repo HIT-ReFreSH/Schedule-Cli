@@ -6,7 +6,7 @@ using System.Text;
 using PlasticMetal.MobileSuit;
 using PlasticMetal.MobileSuit.ObjectModel;
 using PlasticMetal.MobileSuit.Parsing;
-using PlasticMetal.MobileSuit.ObjectModel.Future;
+
 using System.Globalization;
 using static HitRefresh.Schedule.ScheduleStatic;
 using Ical.Net.Serialization;
@@ -22,8 +22,7 @@ namespace HitRefresh.Schedule
         static void Main(string[] args)
         {
             Suit.GetBuilder()
-                .UsePrompt<PowerLineThemedPromptServer>()
-                .UseLog(PlasticMetal.MobileSuit.Core.ILogger.OfFile(@"D:\SCM.log"))//Logger)
+                .UsePowerLine()
                 .Build<Program>()
                 .Run(args);
 
