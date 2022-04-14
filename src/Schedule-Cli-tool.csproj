@@ -37,9 +37,8 @@
     <None Include="..\images\icon.ico" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HitRefresh.Schedule" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="PlasticMetal.MobileSuit" Version="2.1.2" />
+    <PackageReference Include="PlasticMetal.MobileSuit" Version="2.5.0" />
   </ItemGroup>
 
 </Project>
