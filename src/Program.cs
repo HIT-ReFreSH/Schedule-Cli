@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HitRefresh.HitGeneralServices.Jwts;
 using HitRefresh.HitGeneralServices.WeChatServiceHall;
@@ -105,7 +106,7 @@ namespace HitRefresh.Schedule
                 IO.ReadLine("输入教师-周数-教室表达式(正则：教师[周数|起始-截至[单|双]?](|[周数|起始-截至[单|双]?])*教室, 如张三[10]|李四[1|2-9单]正心11)");
             if (weekExpression is null) return "格式不合法";
             _persistence.Schedule[courseName]
-                .AddContent((DayOfWeek) week, (CourseTime) startTime, isLong, isLab, weekExpression);
+                .AddContent((DayOfWeek) week, (CourseTime) startTime, isLong, isLab?CourseContentType.Lab:CourseContentType.Standard, weekExpression);
             return "添加成功";
         }
 
@@ -166,7 +167,7 @@ namespace HitRefresh.Schedule
             if (weekExpression is null) return "格式不合法";
             _persistence.Schedule[course].RemoveSubEntry(targetSub);
             _persistence.Schedule[course]
-                .AddContent((DayOfWeek) week, (CourseTime) startTime, isLong, isLab, weekExpression);
+                .AddContent((DayOfWeek) week, (CourseTime) startTime, isLong, isLab?CourseContentType.Lab:CourseContentType.Standard, weekExpression);
             return "编辑成功";
         }
 
@@ -174,9 +175,10 @@ namespace HitRefresh.Schedule
         ///     导出整张课表
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="prefix"></param>
         [SuitAlias("Ex")]
         [SuitInfo("导出整张课表：Export <.ics>")]
-        public void Export(string path = "")
+        public void Export(string path = "",string prefix="")
         {
             ScheduleCheck();
             if (_persistence.Schedule is null) return;
@@ -184,7 +186,12 @@ namespace HitRefresh.Schedule
                 path = IO.ReadLine("输入保存文件位置") ?? "";
             try
             {
-                var calendar = _persistence.Schedule.ToCalendar();
+               prefix = Regex.Replace(
+                    prefix,
+                    @"\\[Uu]([0-9A-Fa-f]{4})",
+                    m => char.ToString(
+                        (char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+                var calendar = _persistence.Schedule.ToCalendar(prefix);
                 //calendar.Name = IO.ReadLine($"输入课表名称(默认:{calendar.Name})", calendar.Name, null);
                 File.WriteAllText(path,
                     new CalendarSerializer().SerializeToString(calendar),
@@ -287,15 +294,22 @@ namespace HitRefresh.Schedule
             {
                 IO.WriteLine(course.CourseName, OutputType.Info);
                 IO.AppendWriteLinePrefix();
+
                 foreach (var item in course.EnumerateContents())
                 {
+                    var typeExpr = item.Type switch
+                    {
+                        CourseContentType.Standard => "    ",
+                        CourseContentType.Lab => "实验",
+                        _ => "考试"
+                    };
                     var subOutList = new List<PrintUnit>
                     {
                         ($"{CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(item.DayOfWeek)}\t",
                             IO.ColorSetting.InformationColor, null),
                         ($"{Resource.CourseTimeToFriendlyName(item.CourseTime)}\t", IO.ColorSetting.InformationColor,
                             null),
-                        ($"{(item.IsLab ? "实验" : "    ")}\t", IO.ColorSetting.InformationColor, null)
+                        ($"{typeExpr}\t", IO.ColorSetting.InformationColor, null)
                     };
                     for (var i = 1; i <= maxWeek; i++)
                     {
@@ -564,11 +578,17 @@ namespace HitRefresh.Schedule
             IO.AppendWriteLinePrefix();
             foreach (var item in _persistence.Schedule[courseName].EnumerateContents())
             {
+                var typeExpr = item.Type switch
+                {
+                    CourseContentType.Standard => "    ",
+                    CourseContentType.Lab => "实验",
+                    _ => "考试"
+                };
                 IO.WriteLine(Suit.CreateContentArray(
                     ($"{CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(item.DayOfWeek)}\t",
                         IO.ColorSetting.InformationColor, null),
                     ($"{Resource.CourseTimeToFriendlyName(item.CourseTime)}\t", IO.ColorSetting.InformationColor, null),
-                    ($"{(item.IsLab ? "实验" : "    ")}\t", IO.ColorSetting.InformationColor, null),
+                    ($"{typeExpr}\t", IO.ColorSetting.InformationColor, null),
                     ($"{(item.IsLongCourse ? "两届连上" : "        ")}\t", IO.ColorSetting.InformationColor, null)
                 ));
                 IO.AppendWriteLinePrefix();

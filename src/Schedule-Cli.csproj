@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/HIT-ReFreSH/Schedule-Cli</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HIT-ReFreSH/Schedule-Cli.git</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
@@ -36,11 +36,13 @@
     <None Include="..\images\icon.ico" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="HitGeneralServices" Version="0.5.3" />
+    <PackageReference Include="HitRefresh.Schedule" Version="4.1.0" />
     <PackageReference Include="PlasticMetal.MobileSuit" Version="4.0.1" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <ProjectReference Include="..\..\HitRefresh.HitGeneralServices\src\HitRefresh.HitGeneralServices.csproj" />
     <ProjectReference Include="..\..\Schedule-latest\Schedule\Schedule.csproj" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>
